@@ -1,0 +1,7 @@
+Copy here the proper version of these TFS assemblies:
+
+Microsoft.TeamFoundation.Common
+Microsoft.TeamFoundation.Framework.Server
+Microsoft.TeamFoundation.Git.Server
+Microsoft.TeamFoundation.Server.Core
+Microsoft.VisualStudio.Services.WebApi
