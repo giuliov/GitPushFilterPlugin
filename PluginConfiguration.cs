@@ -41,14 +41,17 @@ namespace GitPushFilter
 
                         foreach (var auth in policyElem.Element("ForcePush").Elements())
                         {
+                            var rule = new ForcePushRule();
+
                             switch (auth.Name.LocalName)
                             {
                                 case "Allowed":
-                                    policy.Groups.Add(auth.Attribute("Group").Value.ToLowerInvariant());
+                                    rule.Groups.Add(auth.Attribute("Group").Value.ToLowerInvariant());
                                     break;
                                 default:
                                     break;
                             }//switch
+
                         }//for
 
                         instance.Policies.Add(policy);

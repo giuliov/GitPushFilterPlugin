@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace GitPushFilter
 {
+    /// <summary>
+    /// NOT PRODUCTION READY!
+    /// </summary>
     static class Logger
     {
         internal static void Log(string message)
