@@ -1,10 +1,4 @@
-﻿using Microsoft.TeamFoundation.Framework.Server;
-using Microsoft.TeamFoundation.Git.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace GitPushFilter
 {
@@ -17,7 +11,7 @@ namespace GitPushFilter
 
         public static string DisplayHash(this byte[] b, int numDigits = 5)
         {
-            return String.Join( String.Empty,
+            return String.Join(String.Empty,
                     Array.ConvertAll(b, x => x.ToString("x2")))
                         .Substring(0, numDigits);
         }

@@ -1,16 +1,8 @@
 ﻿using Microsoft.TeamFoundation.Framework.Server;
 using Microsoft.TeamFoundation.Git.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.TeamFoundation.Integration.Server;
-using Microsoft.TeamFoundation.Server.Core;
-using Microsoft.TeamFoundation.Framework.Client;
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Framework.Common;
-using System.Collections;
+using System;
+using System.Linq;
 
 namespace GitPushFilter
 {
@@ -95,7 +87,6 @@ namespace GitPushFilter
              */
             return EventNotificationStatus.ActionPermitted;
         }
-
 
         private Policy GetPolicy(TeamFoundationRequestContext requestContext, PushNotification pushNotification)
         {

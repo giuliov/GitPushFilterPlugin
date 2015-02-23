@@ -1,14 +1,10 @@
 ﻿using Microsoft.TeamFoundation.Framework.Server;
 using Microsoft.TeamFoundation.Git.Server;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GitPushFilter
 {
-    class Policy
+    internal class Policy
     {
         public Policy()
         {
@@ -16,7 +12,9 @@ namespace GitPushFilter
         }
 
         public string CollectionName { get; set; }
+
         public string ProjectName { get; set; }
+
         public string RepositoryName { get; set; }
 
         public List<Rule> Rules { get; private set; }

@@ -6,17 +6,16 @@ using Microsoft.TeamFoundation.Git.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GitPushFilter
 {
-    class ForcePushRule : Rule
+    internal class ForcePushRule : Rule
     {
         public ForcePushRule()
         {
             this.Groups = new List<string>();
         }
+
         // allowed users
         public List<string> Groups { get; private set; }
 

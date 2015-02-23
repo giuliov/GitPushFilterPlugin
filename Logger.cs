@@ -3,16 +3,13 @@ using Microsoft.TeamFoundation.Git.Server;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GitPushFilter
 {
     /// <summary>
     /// NOT PRODUCTION READY!
     /// </summary>
-    static class Logger
+    internal static class Logger
     {
         internal static void Log(string message)
         {

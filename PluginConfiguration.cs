@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace GitPushFilter
 {
-    class PluginConfiguration
+    internal class PluginConfiguration
     {
-        static PluginConfiguration _instance = null;
+        private static PluginConfiguration _instance = null;
 
         static internal PluginConfiguration Instance
         {
@@ -48,10 +44,33 @@ namespace GitPushFilter
                                 case "Allowed":
                                     rule.Groups.Add(auth.Attribute("Group").Value.ToLowerInvariant());
                                     break;
+
                                 default:
                                     break;
                             }//switch
 
+                            policy.Rules.Add(rule);
+                        }//for
+
+                        foreach (var auth in policyElem.Element("ValidEmails").Elements())
+                        {
+                            var rule = new ValidEmailsRule();
+
+                            switch (auth.Name.LocalName)
+                            {
+                                case "AuthorEmail":
+                                    rule.AuthorEmail.Add(auth.Attribute("matches").Value);
+                                    break;
+
+                                case "CommitterEmail":
+                                    rule.CommitterEmail.Add(auth.Attribute("matches").Value);
+                                    break;
+
+                                default:
+                                    break;
+                            }//switch
+
+                            policy.Rules.Add(rule);
                         }//for
 
                         instance.Policies.Add(policy);
@@ -70,8 +89,9 @@ namespace GitPushFilter
         }
 
         public string TfsBaseUrl { get; private set; }
-        public string LogFile { get; private set; }
-        public List<Policy> Policies { get; private set; }
 
+        public string LogFile { get; private set; }
+
+        public List<Policy> Policies { get; private set; }
     }
 }
