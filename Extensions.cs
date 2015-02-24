@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.TeamFoundation.Framework.Server;
+using System;
 
 namespace GitPushFilter
 {
@@ -14,6 +15,12 @@ namespace GitPushFilter
             return String.Join(String.Empty,
                     Array.ConvertAll(b, x => x.ToString("x2")))
                         .Substring(0, numDigits);
+        }
+
+        public static string GetCollectionUri(this TeamFoundationRequestContext requestContext)
+        {
+            TeamFoundationLocationService service = requestContext.GetService<TeamFoundationLocationService>();
+            return service.GetHostLocation(requestContext, service.GetPublicAccessMapping(requestContext, service.CurrentServiceOwner));
         }
     }
 }

@@ -26,8 +26,7 @@ namespace GitPushFilter
             bool force = RequiresForcePush(pushNotification, requestContext, repository);
             if (force)
             {
-                // HACK
-                string collectionUrl = PluginConfiguration.Instance.TfsBaseUrl + requestContext.ServiceHost.VirtualDirectory;
+                string collectionUrl = requestContext.GetCollectionUri();
                 // client API
                 TfsTeamProjectCollection tfs = new TfsTeamProjectCollection(new Uri(collectionUrl));
                 var identityManagement = tfs.GetService<IIdentityManagementService>();

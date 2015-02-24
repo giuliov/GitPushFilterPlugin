@@ -34,7 +34,6 @@ namespace GitPushFilter
                         step = "root attributes";
 
                         // global settings
-                        instance.TfsBaseUrl = doc.Root.Attribute("TfsBaseUrl").Value;
                         instance.LogFile = doc.Root.Attribute("LogFile").Value;
 
                         step = "Policy element";
@@ -116,8 +115,6 @@ namespace GitPushFilter
         {
             this.Policies = new List<Policy>();
         }
-
-        public string TfsBaseUrl { get; private set; }
 
         public bool HasLog { get { return !string.IsNullOrWhiteSpace(this.LogFile); } }
         public string LogFile { get; private set; }
