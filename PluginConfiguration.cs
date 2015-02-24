@@ -28,7 +28,7 @@ namespace GitPushFilter
                             Path.Combine(
                                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase),
                                 baseName),
-                            ".config");
+                            ".policies");
                         XDocument doc = XDocument.Load(xmlFileName);
 
                         step = "root attributes";

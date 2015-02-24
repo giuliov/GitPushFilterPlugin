@@ -10,7 +10,7 @@ The rules can be:
 
 # Configuration
 
-The plugin is driven by the `GitPushFilter.config` configuration file, which must be present
+The plugin is driven by the `GitPushFilter.policies` configuration file, which must be present
 in the same folder, e.g. `%Program Files%\Microsoft Team Foundation Server 12.0\Application Tier\Web Services\bin\Plugins`
 
 ```

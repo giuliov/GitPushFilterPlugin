@@ -79,9 +79,9 @@
     <None Include="LICENSE" />
     <None Include="README.md" />
     <None Include="References\Microsoft.TeamFoundation.Common.dll" />
-    <Content Include="GitPushFilter.config">
+    <None Include="GitPushFilter.policies">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="References\Microsoft.TeamFoundation.Server.Core.dll" />
     <None Include="References\Microsoft.TeamFoundation.Framework.Server.dll" />
     <None Include="References\Microsoft.TeamFoundation.Git.Server.dll" />
