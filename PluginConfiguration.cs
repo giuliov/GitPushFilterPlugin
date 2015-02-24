@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace GitPushFilter
 {
-    class PluginConfiguration
+    internal class PluginConfiguration
     {
-        static PluginConfiguration _instance = null;
+        private static PluginConfiguration _instance = null;
 
         static internal PluginConfiguration Instance
         {
@@ -19,43 +16,96 @@ namespace GitPushFilter
             {
                 if (_instance == null)
                 {
-                    var instance = new PluginConfiguration();
+                    string baseName = Assembly.GetExecutingAssembly().GetName().Name;
+                    string step = "opening file";
 
-                    // Load the options from same folder
-                    string xmlFileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase), "GitPushFilter.config");
-                    XDocument doc = XDocument.Load(xmlFileName);
-
-                    // global settings
-                    instance.TfsBaseUrl = doc.Root.Attribute("TfsBaseUrl").Value;
-                    instance.LogFile = doc.Root.Attribute("LogFile").Value;
-
-                    // policies
-                    foreach (var policyElem in doc.Root.Elements("Policy"))
+                    try
                     {
-                        var policy = new Policy()
-                        {
-                            CollectionName = policyElem.Attribute("Collection").Value,
-                            ProjectName = policyElem.Attribute("Project").Value,
-                            RepositoryName = policyElem.Attribute("Repository").Value,
-                        };
+                        var instance = new PluginConfiguration();
 
-                        foreach (var auth in policyElem.Element("ForcePush").Elements())
+                        // Load the options from same folder
+                        string xmlFileName = Path.ChangeExtension(
+                            Path.Combine(
+                                Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase),
+                                baseName),
+                            ".policies");
+                        XDocument doc = XDocument.Load(xmlFileName);
+
+                        step = "root attributes";
+
+                        // global settings
+                        instance.LogFile = doc.Root.Attribute("LogFile").Value;
+
+                        step = "Policy element";
+                        // policies
+                        foreach (var policyElem in doc.Root.Elements("Policy"))
                         {
-                            switch (auth.Name.LocalName)
+                            step = "Policy attributes";
+                            var policy = new Policy()
                             {
-                                case "Allowed":
-                                    policy.Groups.Add(auth.Attribute("Group").Value.ToLowerInvariant());
-                                    break;
-                                default:
-                                    break;
-                            }//switch
-                        }//for
+                                CollectionName = policyElem.Attribute("Collection").Value,
+                                ProjectName = policyElem.Attribute("Project").Value,
+                                RepositoryName = policyElem.Attribute("Repository").Value,
+                            };
 
-                        instance.Policies.Add(policy);
+                            step = "ForcePush element";
+                            if (policyElem.Elements("ForcePush").Any())
+                            {
+                                var rule = new ForcePushRule();
+                                policy.Rules.Add(rule);
+
+                                foreach (var auth in policyElem.Element("ForcePush").Elements())
+                                {
+                                    switch (auth.Name.LocalName)
+                                    {
+                                        case "Allowed":
+                                            rule.Groups.Add(auth.Attribute("Group").Value.ToLowerInvariant());
+                                            break;
+
+                                        default:
+                                            break;
+                                    }//switch
+                                }//for
+                            }//if
+
+                            step = "ValidEmails element";
+                            if (policyElem.Elements("ValidEmails").Any())
+                            {
+                                var rule = new ValidEmailsRule();
+                                policy.Rules.Add(rule);
+
+                                foreach (var auth in policyElem.Element("ValidEmails").Elements())
+                                {
+                                    switch (auth.Name.LocalName)
+                                    {
+                                        case "AuthorEmail":
+                                            rule.AuthorEmail.Add(auth.Attribute("matches").Value);
+                                            break;
+
+                                        case "CommitterEmail":
+                                            rule.CommitterEmail.Add(auth.Attribute("matches").Value);
+                                            break;
+
+                                        default:
+                                            break;
+                                    }//switch
+                                }//for
+                            }//if
+
+                            instance.Policies.Add(policy);
+                        }
+                        // publish
+                        System.Threading.Interlocked.Exchange(ref _instance, instance);
                     }
-
-                    // publish
-                    System.Threading.Interlocked.Exchange(ref _instance, instance);
+                    catch (System.Exception)
+                    {
+                        System.Diagnostics.EventLog.WriteEntry("TFS Services",
+                            string.Format(
+                                "{0} configuration file error in {1}",
+                                baseName, step),
+                            System.Diagnostics.EventLogEntryType.Error);
+                        throw;
+                    }//try
                 }
                 return _instance;
             }
@@ -66,9 +116,9 @@ namespace GitPushFilter
             this.Policies = new List<Policy>();
         }
 
-        public string TfsBaseUrl { get; private set; }
+        public bool HasLog { get { return !string.IsNullOrWhiteSpace(this.LogFile); } }
         public string LogFile { get; private set; }
-        public List<Policy> Policies { get; private set; }
 
+        public List<Policy> Policies { get; private set; }
     }
 }

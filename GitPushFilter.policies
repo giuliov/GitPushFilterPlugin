@@ -1,13 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <GitPushFilterConfiguration
-    TfsBaseUrl="http://localhost:8080"
     LogFile="d:\temp\GitPushFilter.log">
     <Policy
         Collection="2013u4Collection"
         Project="GitPushFilterPlugin"
         Repository="GitPushFilterPlugin">
         <ForcePush>
-            <Allowed Group="[TEAM FOUNDATION]\Team Foundation Administrators"/>
+            <Allowed Group="[TEAM FOUNDATION]\Team Foundation Administrators" />
         </ForcePush>
+        <ValidEmails>
+            <AuthorEmail    matches="[^a-z]*giuliov[a-z]*@(gmail|msn)\.com[^a-z]*" />
+            <CommitterEmail matches="[^a-z]*giuliov[a-z]*@(gmail|msn)\.com[^a-z]*" />
+        </ValidEmails>
     </Policy>
 </GitPushFilterConfiguration>

@@ -197,3 +197,4 @@ FakesAssemblies/
 
 ### this project ###
 References/*.dll
+/References.local

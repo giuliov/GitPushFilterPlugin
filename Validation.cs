@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace GitPushFilter
+﻿namespace GitPushFilter
 {
-    class Validation
+    internal class Validation
     {
         public Validation()
         {
@@ -15,7 +10,9 @@ namespace GitPushFilter
         }
 
         public bool Fails { get; set; }
+
         public int ReasonCode { get; set; }
+
         public string ReasonMessage { get; set; }
     }
 }
