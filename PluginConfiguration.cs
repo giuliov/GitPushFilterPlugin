@@ -52,10 +52,11 @@ namespace GitPushFilter
                             step = "ForcePush element";
                             if (policyElem.Elements("ForcePush").Any())
                             {
+                                var rule = new ForcePushRule();
+                                policy.Rules.Add(rule);
+
                                 foreach (var auth in policyElem.Element("ForcePush").Elements())
                                 {
-                                    var rule = new ForcePushRule();
-
                                     switch (auth.Name.LocalName)
                                     {
                                         case "Allowed":
@@ -65,18 +66,17 @@ namespace GitPushFilter
                                         default:
                                             break;
                                     }//switch
-
-                                    policy.Rules.Add(rule);
                                 }//for
                             }//if
 
                             step = "ValidEmails element";
                             if (policyElem.Elements("ValidEmails").Any())
                             {
+                                var rule = new ValidEmailsRule();
+                                policy.Rules.Add(rule);
+
                                 foreach (var auth in policyElem.Element("ValidEmails").Elements())
                                 {
-                                    var rule = new ValidEmailsRule();
-
                                     switch (auth.Name.LocalName)
                                     {
                                         case "AuthorEmail":
@@ -90,8 +90,6 @@ namespace GitPushFilter
                                         default:
                                             break;
                                     }//switch
-
-                                    policy.Rules.Add(rule);
                                 }//for
                             }//if
 
