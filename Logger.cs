@@ -1,33 +1,46 @@
 ﻿using Microsoft.TeamFoundation.Framework.Server;
 using Microsoft.TeamFoundation.Git.Server;
+using Microsoft.TeamFoundation.Server.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace GitPushFilter
 {
     /// <summary>
-    /// NOT PRODUCTION READY!
+    /// Wraps log activities
     /// </summary>
     internal static class Logger
     {
-        internal static void Log(string message)
+        internal static void Log(string message, EventLogEntryType level = EventLogEntryType.Information)
         {
-            File.AppendAllText(PluginConfiguration.Instance.LogFile, message + Environment.NewLine);
+            TeamFoundationApplicationCore.Log(message, 9999, level);
+
+            if (PluginConfiguration.Instance.HasLog)
+                File.AppendAllText(PluginConfiguration.Instance.LogFile, message + Environment.NewLine);
         }
 
         internal static void LogException(Exception ex)
         {
-            var lines = new List<string>();
+            TeamFoundationApplicationCore.LogException(ex.Message, ex);
 
-            lines.Add("Exception: " + ex.Message);
-            lines.Add(ex.StackTrace);
+            if (PluginConfiguration.Instance.HasLog)
+            {
+                var lines = new List<string>();
 
-            File.AppendAllLines(PluginConfiguration.Instance.LogFile, lines);
+                lines.Add("Exception: " + ex.Message);
+                lines.Add(ex.StackTrace);
+
+                File.AppendAllLines(PluginConfiguration.Instance.LogFile, lines);
+            }
         }
 
         internal static void LogRequest(TeamFoundationRequestContext requestContext, PushNotification pushNotification, TfsGitRepository repository)
         {
+            if (!PluginConfiguration.Instance.HasLog)
+                return;
+
             var lines = new List<string>();
 
             lines.Add(string.Format("Request from {0} for {1}"

@@ -64,7 +64,7 @@ namespace GitPushFilter
                             var failsAt = validationResults.FirstOrDefault(v => v.Fails);
                             if (failsAt != null)
                             {
-                                Logger.Log("Request DENIED!");
+                                Logger.Log(string.Format("Request DENIED: {0}", failsAt.ReasonMessage));
                                 statusCode = failsAt.ReasonCode;
                                 statusMessage = failsAt.ReasonMessage;
                                 return EventNotificationStatus.ActionDenied;

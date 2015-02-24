@@ -40,7 +40,7 @@ namespace GitPushFilter
                     result.Fails = true;
                     result.ReasonCode = 2;
                     result.ReasonMessage = string.Format(
-                        "Author email '{0}' is not admitted on commit {1}",
+                        "Author email '{0}' on commit {1} is not admitted",
                         authorEmail,
                         gitCommit.ObjectId.DisplayHash());
                     break;
@@ -52,7 +52,7 @@ namespace GitPushFilter
                     result.Fails = true;
                     result.ReasonCode = 3;
                     result.ReasonMessage = string.Format(
-                        "Committer email '{0}' is not admitted on commit {1}",
+                        "Committer email '{0}' on commit {1} is not admitted",
                         authorEmail,
                         gitCommit.ObjectId.DisplayHash());
                     break;
