@@ -6,7 +6,7 @@ namespace GitPushFilter
     {
         public static bool SameAs(this string lhs, string rhs)
         {
-            return string.Compare(lhs, rhs, true) == 0;
+            return lhs == "*" || rhs == "*" || string.Compare(lhs, rhs, true) == 0;
         }
 
         public static string DisplayHash(this byte[] b, int numDigits = 5)
