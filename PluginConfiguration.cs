@@ -31,10 +31,20 @@ namespace GitPushFilter
                             ".policies");
                         XDocument doc = XDocument.Load(xmlFileName);
 
-                        step = "root attributes";
+                        step = "System";
 
                         // global settings
-                        instance.LogFile = doc.Root.Attribute("LogFile").Value;
+                        var systemNode = doc.Root.Element("System");
+                        step = "System.Logging";
+                        instance.LogFile = systemNode.Element("Logging").Attribute("File").Value;
+                        step = "System.eMail";
+                        var eMailNode = systemNode.Element("eMail");
+                        if (eMailNode != null)
+                        {
+                            instance.EmailSender = eMailNode.Attribute("Sender").Value;
+                            instance.EmailSmtpServer = eMailNode.Attribute("SmtpServer").Value;
+                            instance.AdministratorEmail = eMailNode.Attribute("Administrator").Value;
+                        }
 
                         step = "Policy element";
                         // policies
@@ -120,5 +130,10 @@ namespace GitPushFilter
         public string LogFile { get; private set; }
 
         public List<Policy> Policies { get; private set; }
+
+        public bool ShouldSendEmail { get { return !string.IsNullOrWhiteSpace(this.EmailSender); } }
+        public string EmailSender { get; set; }
+        public string EmailSmtpServer { get; set; }
+        public string AdministratorEmail { get; set; }
     }
 }

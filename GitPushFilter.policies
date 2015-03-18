@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<GitPushFilterConfiguration
-    LogFile="d:\temp\GitPushFilter.log">
+<GitPushFilterConfiguration>
+    <System>
+        <Logging
+            File="d:\temp\GitPushFilter.log" />
+        <eMail
+            Sender="tfs@example.com"
+            SmtpServer="localhost"
+            Administrator="tfs-admin@example.com"
+            />
+    </System>
     <Policy
         Collection="2013u4Collection"
         Project="GitPushFilterPlugin"

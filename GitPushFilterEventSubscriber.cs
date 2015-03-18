@@ -1,4 +1,7 @@
-﻿using Microsoft.TeamFoundation.Framework.Server;
+﻿using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.Framework.Client;
+using Microsoft.TeamFoundation.Framework.Common;
+using Microsoft.TeamFoundation.Framework.Server;
 using Microsoft.TeamFoundation.Git.Server;
 using Microsoft.TeamFoundation.Integration.Server;
 using System;
@@ -64,6 +67,22 @@ namespace GitPushFilter
                             var failsAt = validationResults.FirstOrDefault(v => v.Fails);
                             if (failsAt != null)
                             {
+                                if (PluginConfiguration.Instance.ShouldSendEmail)
+                                {
+                                    try
+                                    {
+                                        string email = GetEmailAddress(requestContext, pushNotification);
+                                        if (string.IsNullOrWhiteSpace(email))
+                                            // no email for user -> notify admin
+                                            email = PluginConfiguration.Instance.AdministratorEmail;
+                                        UserAlerter.InformUserOfFailure(email, requestContext, pushNotification, validationResults);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Logger.Log(string.Format("Error: failed to notify user {0}, reason {1}", pushNotification.AuthenticatedUserName, e.Message));
+                                    }//try
+                                }//if
+
                                 Logger.Log(string.Format("Request DENIED: {0}", failsAt.ReasonMessage));
                                 statusCode = failsAt.ReasonCode;
                                 statusMessage = failsAt.ReasonMessage;
@@ -104,6 +123,20 @@ namespace GitPushFilter
             }//for
 
             return null;
+        }
+
+        private string GetEmailAddress(TeamFoundationRequestContext requestContext, PushNotification pushNotification)
+        {
+            var collectionUrl = new Uri(requestContext.GetCollectionUri());
+            var collection = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(collectionUrl);
+            var managementService = collection.GetService<IIdentityManagementService>();
+            TeamFoundationIdentity teamFoundationIdentity = managementService.ReadIdentity(
+                    IdentitySearchFactor.AccountName,
+                    pushNotification.AuthenticatedUserName,
+                    MembershipQuery.None,
+                    ReadIdentityOptions.None);
+
+            return teamFoundationIdentity.GetAttribute("Mail", null);
         }
     }
 }
