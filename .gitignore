@@ -196,5 +196,6 @@ FakesAssemblies/
 *.opt
 
 ### this project ###
-References/*.dll
+/References/*.dll
 /References.local
+/PROPRIETARY
