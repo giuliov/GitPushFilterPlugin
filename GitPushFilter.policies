@@ -19,6 +19,9 @@
         <ValidEmails>
             <AuthorEmail    matches="[^a-z]*giuliov[a-z]*@(gmail|msn)\.com[^a-z]*" />
             <CommitterEmail matches="[^a-z]*giuliov[a-z]*@(gmail|msn)\.com[^a-z]*" />
+            <AdditionalInfo><![CDATA[
+Please ....
+            ]]></AdditionalInfo>
         </ValidEmails>
     </Policy>
 </GitPushFilterConfiguration>

@@ -55,7 +55,7 @@ namespace GitPushFilter
                     var policy = GetPolicy(requestContext, pushNotification);
                     if (policy != null)
                     {
-                        Logger.Log("Request controlled by policy");
+                        Logger.LogStart("Request controlled by policy");
 
                         var gitRepoService = requestContext.GetService<TeamFoundationGitRepositoryService>();
                         using (var repository = gitRepoService.FindRepositoryById(requestContext, pushNotification.RepositoryId))
@@ -83,7 +83,7 @@ namespace GitPushFilter
                                     }//try
                                 }//if
 
-                                Logger.Log(string.Format("Request DENIED: {0}", failsAt.ReasonMessage));
+                                Logger.LogDenied(failsAt.ReasonMessage);
                                 statusCode = failsAt.ReasonCode;
                                 statusMessage = failsAt.ReasonMessage;
                                 return EventNotificationStatus.ActionDenied;
@@ -95,7 +95,7 @@ namespace GitPushFilter
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                throw;
+                throw; // TFS will disable plugin
             }//try
 
             /*
