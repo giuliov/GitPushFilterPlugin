@@ -13,6 +13,9 @@
         Collection="2013u4Collection"
         Project="GitPushFilterPlugin"
         Repository="GitPushFilterPlugin">
+        <LimitSize megabytes="1">
+            <Allowed Group="[TEAM FOUNDATION]\Team Foundation Administrators" />
+        </LimitSize>
         <ForcePush>
             <Allowed Group="[TEAM FOUNDATION]\Team Foundation Administrators" />
         </ForcePush>
