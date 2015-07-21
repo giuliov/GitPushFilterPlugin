@@ -10,6 +10,16 @@ The rules can be:
  - *Force Push* to restrict Force Push (i.e. history rewriting) to a group of users, no matters the permission on the Repository
  - *email* to constraint the accepted email addresses for Authors and Contributors
 
+# Install
+
+Copy the DLL and the policy file in `%Program Files%\Microsoft Team Foundation Server 12.0\Application Tier\Web Services\bin\Plugins`.
+
+Add a new source to the Event Log, e.g.
+
+```
+New-EventLog -LogName "Application" -Source "GitPushFilter"
+```
+
 # Configuration
 
 The plugin is driven by the `GitPushFilter.policies` configuration file, which must be present
@@ -51,6 +61,7 @@ in the same folder, e.g. `%Program Files%\Microsoft Team Foundation Server 12.0\
 | _Collection_       | Yes | No  | TeamProjectCollection scope, use `*` for all Collections             |
 | _Project_          | Yes | No  | TeamProject scope, use `*` for all Projects in Collection            |
 | _Repository_       | Yes | No  | Git Repository scope, use `*` for all Repositories in Project        |
+| **ReadOnly**       | No  | No  | Rule to refuse any change to the repository, putting it in a *read-only* mode |
 | **LimitSize**      | No  | No  | Rule to control the size of files in a push (not a single commit)    |
 | **ForcePush**      | No  | No  | Rule to control history rewrite, i.e. *force push*                   |
 | **Allowed**        | Yes | Yes | The `Group` attribute specify the Windows or TFS group               |
