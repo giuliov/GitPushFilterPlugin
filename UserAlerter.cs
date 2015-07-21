@@ -22,6 +22,7 @@ namespace GitPushFilter
             buf.AppendLine();
             foreach (var res in validationResults.Where(res => res.Fails))
             {
+                buf.Append(" - ");
                 buf.AppendLine(res.ReasonMessage);
             }
             buf.AppendLine();
