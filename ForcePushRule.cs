@@ -9,15 +9,11 @@ using System.Linq;
 
 namespace GitPushFilter
 {
-    internal class ForcePushRule : Rule
+    internal class ForcePushRule : ExemptGroupsRuleBase
     {
         public ForcePushRule()
         {
-            this.Groups = new List<string>();
         }
-
-        // allowed users
-        public List<string> Groups { get; private set; }
 
         public override Validation CheckRule(TeamFoundationRequestContext requestContext, PushNotification pushNotification, TfsGitRepository repository)
         {
@@ -26,20 +22,7 @@ namespace GitPushFilter
             bool force = RequiresForcePush(pushNotification, requestContext, repository);
             if (force)
             {
-                string collectionUrl = requestContext.GetCollectionUri();
-                // client API
-                TfsTeamProjectCollection tfs = new TfsTeamProjectCollection(new Uri(collectionUrl));
-                var identityManagement = tfs.GetService<IIdentityManagementService>();
-                var requestIdentity = identityManagement.ReadIdentity(IdentitySearchFactor.AccountName, pushNotification.AuthenticatedUserName, MembershipQuery.Direct, ReadIdentityOptions.None);
-
-                bool allowed = false;
-                foreach (var groupName in this.Groups)
-                {
-                    var groupIdentity = identityManagement.ReadIdentity(IdentitySearchFactor.AccountName, groupName, MembershipQuery.Direct, ReadIdentityOptions.None);
-                    allowed |= identityManagement.IsMember(groupIdentity.Descriptor, requestIdentity.Descriptor);
-                }//for
-
-                if (allowed)
+                if (IsUserExempted(requestContext, pushNotification))
                 {
                     Logger.Log(string.Format(
                         "User {0} has explicit permission for {1}"
@@ -50,7 +33,7 @@ namespace GitPushFilter
                 {
                     result.Fails = true;
                     result.ReasonCode = 1;
-                    result.ReasonMessage = "Force Push policy fails for user " + pushNotification.AuthenticatedUserName;
+                    result.ReasonMessage = "Force Push policy fails for user " + pushNotification.AuthenticatedUserName + ".";
                 }//if
             }//if
 

@@ -13,6 +13,19 @@ namespace GitPushFilter
     /// </summary>
     internal static class Logger
     {
+        public const string EventLogSource = "GitPushFilter";
+        //public const string EventLog = "Application";
+
+        internal static void LogStart(string message)
+        {
+            TeamFoundationApplicationCore.Log(message, 9999, EventLogEntryType.Information);
+
+            if (PluginConfiguration.Instance.HasLog)
+                File.AppendAllText(PluginConfiguration.Instance.LogFile,
+                    string.Format("At {0}{1}  {2}{1}"
+                    , DateTime.Now, Environment.NewLine, message));
+        }
+
         internal static void Log(string message, EventLogEntryType level = EventLogEntryType.Information)
         {
             TeamFoundationApplicationCore.Log(message, 9999, level);
@@ -21,9 +34,23 @@ namespace GitPushFilter
                 File.AppendAllText(PluginConfiguration.Instance.LogFile, message + Environment.NewLine);
         }
 
+        internal static void LogDenied(string reasonMessage)
+        {
+            TeamFoundationApplicationCore.Log(reasonMessage, 9999, EventLogEntryType.Warning);
+
+            EventLog.WriteEntry(EventLogSource, reasonMessage, EventLogEntryType.Warning, 1002);
+
+            if (PluginConfiguration.Instance.HasLog)
+                File.AppendAllText(PluginConfiguration.Instance.LogFile,
+                    string.Format("At {0}{1}  Request DENIED: {2}{1}"
+                    , DateTime.Now, Environment.NewLine, reasonMessage));
+        }
+
         internal static void LogException(Exception ex)
         {
             TeamFoundationApplicationCore.LogException(ex.Message, ex);
+
+            EventLog.WriteEntry(EventLogSource, ex.Message, EventLogEntryType.Error, 1001);
 
             if (PluginConfiguration.Instance.HasLog)
             {

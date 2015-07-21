@@ -58,6 +58,37 @@ namespace GitPushFilter
                                 RepositoryName = policyElem.Attribute("Repository").Value,
                             };
 
+                            step = "ReadOnly element";
+                            if (policyElem.Elements("ReadOnly").Any())
+                            {
+                                var rule = new ReadOnlyRule();
+                                policy.Rules.Add(rule);
+                            }//if
+
+                            step = "LimitSize element";
+                            if (policyElem.Elements("LimitSize").Any())
+                            {
+                                var limitSizeNode = policyElem.Element("LimitSize");
+
+                                var rule = new LimitSizeRule();
+                                string MB = limitSizeNode.Attribute("megabytes").Value;
+                                rule.Megabytes = int.Parse(MB);
+                                policy.Rules.Add(rule);
+
+                                foreach (var auth in limitSizeNode.Elements())
+                                {
+                                    switch (auth.Name.LocalName)
+                                    {
+                                        case "Allowed":
+                                            rule.Groups.Add(auth.Attribute("Group").Value.ToLowerInvariant());
+                                            break;
+
+                                        default:
+                                            break;
+                                    }//switch
+                                }//for
+                            }//if
+
                             step = "ForcePush element";
                             if (policyElem.Elements("ForcePush").Any())
                             {
@@ -103,7 +134,8 @@ namespace GitPushFilter
                             }//if
 
                             instance.Policies.Add(policy);
-                        }
+                        }//foreach policy
+
                         // publish
                         System.Threading.Interlocked.Exchange(ref _instance, instance);
                     }
