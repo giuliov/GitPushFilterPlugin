@@ -78,6 +78,7 @@
     <Compile Include="PluginConfiguration.cs" />
     <Compile Include="Policy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyRule.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="UserAlerter.cs" />
     <Compile Include="Validation.cs" />

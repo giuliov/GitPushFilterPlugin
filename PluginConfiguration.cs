@@ -58,6 +58,13 @@ namespace GitPushFilter
                                 RepositoryName = policyElem.Attribute("Repository").Value,
                             };
 
+                            step = "ReadOnly element";
+                            if (policyElem.Elements("ReadOnly").Any())
+                            {
+                                var rule = new ReadOnlyRule();
+                                policy.Rules.Add(rule);
+                            }//if
+
                             step = "LimitSize element";
                             if (policyElem.Elements("LimitSize").Any())
                             {
@@ -127,7 +134,8 @@ namespace GitPushFilter
                             }//if
 
                             instance.Policies.Add(policy);
-                        }
+                        }//foreach policy
+
                         // publish
                         System.Threading.Interlocked.Exchange(ref _instance, instance);
                     }

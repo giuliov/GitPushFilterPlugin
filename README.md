@@ -5,6 +5,7 @@ Its purpose is to implement enterprise policies on Git repositories.
 A **policy** controls behavior for one or more repositories (you can use the `*` wildcard); a policy
 checks one or more **rules** that must be satisfied for the requested Git push operation to be accepted.
 The rules can be:
+ - *read-only* to refuse any change to the repository
  - *Limit size* to avoid accepting big files in the repository
  - *Force Push* to restrict Force Push (i.e. history rewriting) to a group of users, no matters the permission on the Repository
  - *email* to constraint the accepted email addresses for Authors and Contributors
@@ -22,6 +23,7 @@ in the same folder, e.g. `%Program Files%\Microsoft Team Foundation Server 12.0\
       Project="name-of-tfs-project-or-wildcard"
       Repository="name-of-tfs-git-repository-or-wildcard">
     <!-- rules -->
+    <ReadOnly />
     <LimitSize megabytes="1">
       <!-- optional exempted groups -->
       <Allowed Group="windows-or-tfs-group"/>

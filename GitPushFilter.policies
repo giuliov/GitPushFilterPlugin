@@ -13,6 +13,7 @@
         Collection="2013u4Collection"
         Project="GitPushFilterPlugin"
         Repository="GitPushFilterPlugin">
+        <ReadOnly />
         <LimitSize megabytes="1">
             <Allowed Group="[TEAM FOUNDATION]\Team Foundation Administrators" />
         </LimitSize>
