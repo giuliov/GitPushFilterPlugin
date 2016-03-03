@@ -73,11 +73,11 @@ in the same folder, e.g. `%Program Files%\Microsoft Team Foundation Server 12.0\
 # Build
 To compile the project, you must copy in the `References` folder, the proper version of the following TFS assemblies:
 
-Microsoft.TeamFoundation.Client
-Microsoft.TeamFoundation.Common
-Microsoft.TeamFoundation.Framework.Server
-Microsoft.TeamFoundation.Git.Server
-Microsoft.TeamFoundation.Server.Core
-Microsoft.VisualStudio.Services.WebApi
+ - Microsoft.TeamFoundation.Client
+ - Microsoft.TeamFoundation.Common
+ - Microsoft.TeamFoundation.Framework.Server
+ - Microsoft.TeamFoundation.Git.Server
+ - Microsoft.TeamFoundation.Server.Core
+ - Microsoft.VisualStudio.Services.WebApi
 
 Built and tested with Visual Studio 2013 Update 4 and TFS 2013 Update 4.
