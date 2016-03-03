@@ -1,5 +1,6 @@
 Copy here the proper version of these TFS assemblies:
 
+Microsoft.TeamFoundation.Client
 Microsoft.TeamFoundation.Common
 Microsoft.TeamFoundation.Framework.Server
 Microsoft.TeamFoundation.Git.Server
