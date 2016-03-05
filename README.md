@@ -81,3 +81,6 @@ To compile the project, you must copy in the `References` folder, the proper ver
  - Microsoft.VisualStudio.Services.WebApi
 
 Built and tested with Visual Studio 2013 Update 4 and TFS 2013 Update 4.
+
+You must define environment variable `TFS_HOME` to automatically copy the output to TFS plugin directory.
+For example, `%ProgramFiles%\Microsoft Team Foundation Server 12.0`

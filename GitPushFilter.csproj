@@ -101,7 +101,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>robocopy $(TargetDir) "\\vm-tfs2013\c$\Program Files\Microsoft Team Foundation Server 12.0\Application Tier\Web Services\bin\Plugins" $(TargetName).* /R:1 /W:0 /TBD
+    <PostBuildEvent>robocopy $(TargetDir) "$(TFS_HOME)\Application Tier\Web Services\bin\Plugins" $(TargetName).* /R:1 /W:0 /TBD
 REM IF %25ERRORLEVEL%25 GEQ 8 exit 1
 exit 0</PostBuildEvent>
   </PropertyGroup>
